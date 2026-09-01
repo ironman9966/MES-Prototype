@@ -1,6 +1,6 @@
 package com.example.test;
 
-public enum OrderStatus {
+public enum ProductionOrderStatus {
     Open,
     Planned,
     Released,

@@ -1,8 +1,10 @@
-package com.example.test;
+package com.example.test.controller;
 
 import java.net.URI;
 import java.util.List;
 
+import com.example.test.ProductionOrder;
+import com.example.test.service.ProductionOrderService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
