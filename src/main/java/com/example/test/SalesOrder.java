@@ -1,13 +1,8 @@
 package com.example.test;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import java.util.*;
+
+import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,10 +19,26 @@ public class SalesOrder {
     private Long id;
 
     @Column(nullable=false ,unique=true, length=20)
-    private String SalesOrderNumber;
+    private String salesOrderNumber;
 
     @OneToMany(mappedBy="salesOrder",cascade=CascadeType.ALL , orphanRemoval=true)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private SalesLine salesLine;
+    private List<SalesLine> salesLine = new ArrayList<>();
+
+    @Enumerated
+    private OrderStatus orderStatus;
+
+    public enum OrderStatus{
+        Open,
+        Picked,
+        Invoiced,
+        Cancelled
+    }
+
+    protected void addSalesLine(SalesLine line){
+        salesLine.add(line);
+        line.setSalesOrder(this);
+
+    }
 }
