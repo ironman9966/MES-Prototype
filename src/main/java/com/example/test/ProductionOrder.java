@@ -67,7 +67,7 @@ public class ProductionOrder {
     // rather than a manual ALTER, so it's versioned and reviewable.
     @Enumerated(EnumType.STRING)
     @Column(length = 15)
-    private OrderStatus status;
+    private ProductionOrderStatus status;
 
     //concurrency -> optimistic concurrency control
     @Version
@@ -162,11 +162,11 @@ public class ProductionOrder {
         this.inputDate = inputDate;
     }
 
-    public OrderStatus getStatus() {
+    public ProductionOrderStatus getStatus() {
         return status;
     }
 
-    public void setStatus(OrderStatus status) {
+    public void setStatus(ProductionOrderStatus status) {
         this.status = status;
     }
 
