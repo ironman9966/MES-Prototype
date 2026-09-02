@@ -1,4 +1,4 @@
-package com.example.test;
+package com.example.mes.productionorder;
 
 public enum ProductionOrderStatus {
     Open,

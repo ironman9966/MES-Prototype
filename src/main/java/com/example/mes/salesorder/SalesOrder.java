@@ -1,4 +1,4 @@
-package com.example.test;
+package com.example.mes.salesorder;
 
 import java.util.*;
 
@@ -36,9 +36,8 @@ public class SalesOrder {
         Cancelled
     }
 
-    protected void addSalesLine(SalesLine line){
-        salesLine.add(line);
+    public void addSalesLine(SalesLine line){
         line.setSalesOrder(this);
-
+        salesLine.add(line);
     }
 }

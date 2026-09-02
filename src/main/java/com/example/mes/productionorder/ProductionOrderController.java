@@ -1,10 +1,8 @@
-package com.example.test.controller;
+package com.example.mes.productionorder;
 
 import java.net.URI;
 import java.util.List;
 
-import com.example.test.ProductionOrder;
-import com.example.test.service.ProductionOrderService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

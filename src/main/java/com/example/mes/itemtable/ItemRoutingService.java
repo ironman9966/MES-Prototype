@@ -1,7 +1,5 @@
-package com.example.test.service;
+package com.example.mes.itemtable;
 
-import com.example.test.ItemRouting;
-import com.example.test.repository.ItemRoutingRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
 

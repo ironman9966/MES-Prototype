@@ -1,7 +1,5 @@
-package com.example.test.controller;
+package com.example.mes.itemtable;
 
-import com.example.test.ItemTable;
-import com.example.test.service.ItemTableService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;

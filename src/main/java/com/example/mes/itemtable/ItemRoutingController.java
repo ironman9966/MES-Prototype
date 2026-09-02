@@ -1,7 +1,5 @@
-package com.example.test.controller;
+package com.example.mes.itemtable;
 
-import com.example.test.ItemRouting;
-import com.example.test.service.ItemRoutingService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;

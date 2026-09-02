@@ -1,10 +1,8 @@
-package com.example.test.service;
+package com.example.mes.itemtable;
 
 import java.util.List;
 import java.util.Optional;
 
-import com.example.test.ItemTable;
-import com.example.test.repository.ItemTableRepository;
 import org.springframework.stereotype.Service;
 
 @Service

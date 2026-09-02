@@ -1,4 +1,4 @@
-package com.example.test;
+package com.example.mes;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

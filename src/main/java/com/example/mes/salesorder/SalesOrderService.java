@@ -1,7 +1,5 @@
-package com.example.test.service;
+package com.example.mes.salesorder;
 
-import com.example.test.SalesOrder;
-import com.example.test.repository.SalesOrderRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -12,9 +10,11 @@ import java.util.Optional;
 public class SalesOrderService {
 
     private final SalesOrderRepository salesOrderRepository;
+    private final SalesLineService salesLineService;
 
-    SalesOrderService(SalesOrderRepository repository) {
+    SalesOrderService(SalesOrderRepository repository, SalesLineService salesLineService) {
         this.salesOrderRepository = repository;
+        this.salesLineService = salesLineService;
     }
 
     @GetMapping
@@ -27,6 +27,7 @@ public class SalesOrderService {
     }
 
     public SalesOrder createSalesOrder(SalesOrder order){
+
         return salesOrderRepository.save(order);
     }
 

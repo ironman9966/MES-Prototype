@@ -1,6 +1,5 @@
-package com.example.test.repository;
+package com.example.mes.salesorder;
 
-import com.example.test.SalesOrder;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

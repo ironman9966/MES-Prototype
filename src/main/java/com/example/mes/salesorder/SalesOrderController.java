@@ -1,9 +1,9 @@
-package com.example.test.controller;
+package com.example.mes.salesorder;
 
-import com.example.test.SalesOrder;
-import com.example.test.service.SalesOrderService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,4 +32,10 @@ class SalesOrderController {
         return service.getSalesOrderByStatus(status);
     }
 
+    @PostMapping
+    public ResponseEntity<SalesOrder> create(@RequestBody SalesOrder order){
+        SalesOrder saved = service.createSalesOrder(order);
+        URI location = URI.create("/sales-order/" + saved.getId());
+        return ResponseEntity.created(location).body(saved);
+    }
 }

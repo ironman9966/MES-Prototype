@@ -1,6 +1,5 @@
-package com.example.test.repository;
+package com.example.mes.productionorder;
 
-import com.example.test.ProductionOrder;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
