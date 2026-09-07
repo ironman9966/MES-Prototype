@@ -1,10 +1,9 @@
 package com.example.mes.itemtable;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +25,13 @@ class ItemTableController {
     @GetMapping("/{item_id}")
     public Optional<ItemTable> getByItemId(@PathVariable String item_id){
         return service.getItemId(item_id);
+    }
+
+    @PostMapping
+    public ResponseEntity<ItemTable> createItem(@RequestBody ItemTable item){
+        ItemTable saved = service.createItem(item);
+        URI location = URI.create("item-table" + saved.getId());
+        return ResponseEntity.created(location).body(saved);
     }
 
 }

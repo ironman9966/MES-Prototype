@@ -21,4 +21,8 @@ public class ItemTableService {
     public Optional<ItemTable> getItemId(String id){
         return repository.findByItemId(id);
     }
+
+    public ItemTable createItem(ItemTable item){
+        return repository.save(item);
+    }
 }
