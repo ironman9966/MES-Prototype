@@ -14,6 +14,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.time.LocalDate;
+
 @Entity
 @Getter
 @Setter
@@ -37,4 +39,6 @@ public class SalesLine {
     private ItemTable itemId;
 
     private Long quantity;
+
+    private LocalDate requestDeliveryDate;
 }
