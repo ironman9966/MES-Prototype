@@ -27,15 +27,27 @@ class SalesOrderController {
         return service.getByOrderNumber(orderNumber);
     }
 
-    @GetMapping
+    @GetMapping("/orderStatus")
     public List<SalesOrder> getByOrderStatus(@RequestParam SalesOrder.OrderStatus status){
         return service.getSalesOrderByStatus(status);
     }
 
     @PostMapping
-    public ResponseEntity<SalesOrder> create(@RequestBody SalesOrder order){
-        SalesOrder saved = service.createSalesOrder(order);
-        URI location = URI.create("/sales-order/" + saved.getId());
+    public ResponseEntity<SalesOrderResponse> create(@RequestBody SalesOrderRequest order){
+        SalesOrderResponse saved = service.createSalesOrder(order);
+        URI location = URI.create("/sales-order/" + saved.id());
         return ResponseEntity.created(location).body(saved);
+    }
+
+    @DeleteMapping("/{orderNumber}")
+    public ResponseEntity<Void> delete(@PathVariable String orderNumber){
+        service.deleteSalesOrder(orderNumber);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{orderNumber}")
+    public ResponseEntity<SalesOrderResponse.SalesOrderUpdateResponse> updateSalesOrder(@PathVariable String orderNumber, @RequestBody SalesOrderRequest request){
+        SalesOrderResponse.SalesOrderUpdateResponse response = service.updateSalesOrder(request);
+        return ResponseEntity.ok(response);
     }
 }

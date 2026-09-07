@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.stereotype.Component;
 
 @Entity()
 @Getter
@@ -24,9 +25,10 @@ public class SalesOrder {
     @OneToMany(mappedBy="salesOrder",cascade=CascadeType.ALL , orphanRemoval=true)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private List<SalesLine> salesLine = new ArrayList<>();
+    private List<SalesLine> salesLines = new ArrayList<>();
 
     @Enumerated
+    @Column(nullable = false)
     private OrderStatus orderStatus;
 
     public enum OrderStatus{
@@ -38,6 +40,6 @@ public class SalesOrder {
 
     public void addSalesLine(SalesLine line){
         line.setSalesOrder(this);
-        salesLine.add(line);
+        salesLines.add(line);
     }
 }

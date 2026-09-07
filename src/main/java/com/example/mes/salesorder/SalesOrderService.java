@@ -1,5 +1,9 @@
 package com.example.mes.salesorder;
 
+import com.example.mes.exceptions.ItemNotFoundException;
+import com.example.mes.itemtable.ItemTable;
+import com.example.mes.itemtable.ItemTableRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -10,11 +14,11 @@ import java.util.Optional;
 public class SalesOrderService {
 
     private final SalesOrderRepository salesOrderRepository;
-    private final SalesLineService salesLineService;
+    private final ItemTableRepository itemTableRepository;
 
-    SalesOrderService(SalesOrderRepository repository, SalesLineService salesLineService) {
+    SalesOrderService(SalesOrderRepository repository, ItemTableRepository itemTableRepository) {
         this.salesOrderRepository = repository;
-        this.salesLineService = salesLineService;
+        this.itemTableRepository = itemTableRepository;
     }
 
     @GetMapping
@@ -26,12 +30,56 @@ public class SalesOrderService {
         return salesOrderRepository.findBySalesOrderNumber(orderNumber);
     }
 
-    public SalesOrder createSalesOrder(SalesOrder order){
+    @Transactional
+    public SalesOrderResponse createSalesOrder(SalesOrderRequest order){
+        SalesOrder salesOrder = new SalesOrder();
+        salesOrder.setSalesOrderNumber(order.orderNumber());
+        salesOrder.setOrderStatus(order.status());
 
-        return salesOrderRepository.save(order);
+        for(SalesOrderRequest.SalesLineRequest line : order.salesLines()){
+            ItemTable item = itemTableRepository.findByItemId(line.itemId())
+                    .orElseThrow(() -> new ItemNotFoundException("Item not found:"+line.itemId()));
+            SalesLine salesLine = new SalesLine();
+            salesLine.setItemId(item);
+            salesLine.setRequestDeliveryDate(line.deliveryDate());
+            salesLine.setQuantity(line.quantity());
+            salesOrder.addSalesLine(salesLine);
+        }
+        SalesOrder saved = salesOrderRepository.save(salesOrder);
+
+        List<SalesOrderResponse.SalesLineResponse> lineResponses = saved.getSalesLines().stream()
+                .map((SalesLine line) -> new SalesOrderResponse.SalesLineResponse(
+                        line.getId(),
+                        line.getSalesOrder().getSalesOrderNumber(),
+                        line.getQuantity(),
+                        line.getItemId().getItemId(),
+                        line.getRequestDeliveryDate()
+                )).toList();
+
+        return new SalesOrderResponse(
+                saved.getId(),
+                saved.getSalesOrderNumber(),
+                saved.getOrderStatus(),
+                lineResponses);
     }
 
     public List<SalesOrder> getSalesOrderByStatus(SalesOrder.OrderStatus status){
         return salesOrderRepository.findByOrderStatus(status);
+    }
+
+    @Transactional
+    public void deleteSalesOrder(String orderNumber){
+        SalesOrder order = salesOrderRepository.findBySalesOrderNumber(orderNumber)
+                .orElseThrow(() -> new ItemNotFoundException("Order not found:" + orderNumber));
+        salesOrderRepository.delete(order);
+    }
+
+    @Transactional
+    public SalesOrderResponse.SalesOrderUpdateResponse updateSalesOrder(SalesOrderRequest request){
+        SalesOrder salesOrder = salesOrderRepository.findBySalesOrderNumber(request.orderNumber())
+                .orElseThrow(() -> new ItemNotFoundException("Order not found:"+request.orderNumber()));
+        salesOrder.setOrderStatus(request.status());
+
+        return SalesOrderResponse.fromEntity(salesOrder);
     }
 }
