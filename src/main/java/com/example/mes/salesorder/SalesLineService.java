@@ -25,6 +25,7 @@ class SalesLineService {
         line.setItemId(item);
         line.setSalesOrder(order);
         line.setQuantity(request.quantity());
+        line.setRequestDeliveryDate(request.deliveryDate());
 
         return line;
     }

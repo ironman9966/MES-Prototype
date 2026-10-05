@@ -5,7 +5,6 @@ import com.example.mes.itemtable.ItemTable;
 import com.example.mes.itemtable.ItemTableRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,13 +20,12 @@ public class SalesOrderService {
         this.itemTableRepository = itemTableRepository;
     }
 
-    @GetMapping
-    public List<SalesOrder> getAll(){
-        return salesOrderRepository.findAll();
+    public List<SalesOrderResponse> getAll(){
+        return salesOrderRepository.findAll().stream().map(SalesOrderResponse::fromEntity).toList();
     }
 
-    public Optional<SalesOrder> getByOrderNumber(String orderNumber){
-        return salesOrderRepository.findBySalesOrderNumber(orderNumber);
+    public Optional<SalesOrderResponse> getByOrderNumber(String orderNumber){
+        return salesOrderRepository.findBySalesOrderNumber(orderNumber).map(SalesOrderResponse::fromEntity);
     }
 
     @Transactional
@@ -47,24 +45,13 @@ public class SalesOrderService {
         }
         SalesOrder saved = salesOrderRepository.save(salesOrder);
 
-        List<SalesOrderResponse.SalesLineResponse> lineResponses = saved.getSalesLines().stream()
-                .map((SalesLine line) -> new SalesOrderResponse.SalesLineResponse(
-                        line.getId(),
-                        line.getSalesOrder().getSalesOrderNumber(),
-                        line.getQuantity(),
-                        line.getItemId().getItemId(),
-                        line.getRequestDeliveryDate()
-                )).toList();
-
-        return new SalesOrderResponse(
-                saved.getId(),
-                saved.getSalesOrderNumber(),
-                saved.getOrderStatus(),
-                lineResponses);
+        return SalesOrderResponse.fromEntity(saved);
     }
 
-    public List<SalesOrder> getSalesOrderByStatus(SalesOrder.OrderStatus status){
-        return salesOrderRepository.findByOrderStatus(status);
+    public List<SalesOrderResponse> getSalesOrderByStatus(SalesOrder.OrderStatus status){
+        List<SalesOrder> salesOrders = salesOrderRepository.findByOrderStatus(status);
+
+        return salesOrders.stream().map(SalesOrderResponse::fromEntity).toList();
     }
 
     @Transactional
@@ -75,7 +62,7 @@ public class SalesOrderService {
     }
 
     @Transactional
-    public SalesOrderResponse.SalesOrderUpdateResponse updateSalesOrder(SalesOrderRequest request){
+    public SalesOrderResponse updateSalesOrder(SalesOrderRequest request){
         SalesOrder salesOrder = salesOrderRepository.findBySalesOrderNumber(request.orderNumber())
                 .orElseThrow(() -> new ItemNotFoundException("Order not found:"+request.orderNumber()));
         salesOrder.setOrderStatus(request.status());

@@ -18,18 +18,19 @@ class SalesOrderController {
     }
 
     @GetMapping
-    public List<SalesOrder> getAllSalesOrder(){
+    public List<SalesOrderResponse> getAllSalesOrder(){
         return service.getAll();
     }
 
     @GetMapping("/{orderNumber}")
-    public Optional<SalesOrder> getBySalesOrderNumber(@PathVariable String orderNumber){
+    public Optional<SalesOrderResponse> getBySalesOrderNumber(@PathVariable String orderNumber){
         return service.getByOrderNumber(orderNumber);
     }
 
     @GetMapping("/orderStatus")
-    public List<SalesOrder> getByOrderStatus(@RequestParam SalesOrder.OrderStatus status){
-        return service.getSalesOrderByStatus(status);
+    public ResponseEntity<List<SalesOrderResponse>> getByOrderStatus(@RequestParam SalesOrder.OrderStatus status){
+        List<SalesOrderResponse> response = service.getSalesOrderByStatus(status);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping
@@ -46,8 +47,8 @@ class SalesOrderController {
     }
 
     @PatchMapping("/{orderNumber}")
-    public ResponseEntity<SalesOrderResponse.SalesOrderUpdateResponse> updateSalesOrder(@PathVariable String orderNumber, @RequestBody SalesOrderRequest request){
-        SalesOrderResponse.SalesOrderUpdateResponse response = service.updateSalesOrder(request);
+    public ResponseEntity<SalesOrderResponse> updateSalesOrder(@PathVariable String orderNumber, @RequestBody SalesOrderRequest request){
+        SalesOrderResponse response = service.updateSalesOrder(request);
         return ResponseEntity.ok(response);
     }
 }

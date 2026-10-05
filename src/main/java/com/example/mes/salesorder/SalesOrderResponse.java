@@ -12,23 +12,30 @@ public record SalesOrderResponse(
     public record SalesLineResponse(
             Long id,
             String orderNumber,
-            Long quantitiy,
+            Long quantity,
             String item,
             LocalDate requestDeliveryDate
     ){
+        public static SalesLineResponse fromEntity(SalesLine line) {
+            return new SalesLineResponse(
+                    line.getId(),
+                    line.getSalesOrder().getSalesOrderNumber(),
+                    line.getQuantity(),
+                    line.getItemId().getItemId(),
+                    line.getRequestDeliveryDate()
+            );
+        }
     }
 
-    public record SalesOrderUpdateResponse(
-            Long id,
-            String orderNumber,
-            SalesOrder.OrderStatus orderStatus
-    ){
+    public static SalesOrderResponse fromEntity(SalesOrder salesOrder){
+        List<SalesLineResponse> salesLineResponses = salesOrder.getSalesLines().stream().map(
+                SalesLineResponse::fromEntity).toList();
 
-    }
-
-    public static SalesOrderResponse.SalesOrderUpdateResponse fromEntity(SalesOrder salesOrder){
-        return new SalesOrderResponse.SalesOrderUpdateResponse(salesOrder.getId(),
+        return new SalesOrderResponse(salesOrder.getId(),
                 salesOrder.getSalesOrderNumber(),
-                salesOrder.getOrderStatus());
+                salesOrder.getOrderStatus(),
+                salesLineResponses
+                );
     }
+
 }
