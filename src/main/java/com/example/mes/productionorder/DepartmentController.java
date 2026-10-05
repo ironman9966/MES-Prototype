@@ -1,7 +1,5 @@
 package com.example.mes.productionorder;
 
-import org.apache.catalina.connector.Response;
-import org.aspectj.weaver.patterns.DeclareParentsMixin;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,7 +12,7 @@ import java.net.URI;
 @RequestMapping("/department")
 public class DepartmentController {
 
-    private DepartmentService service;
+    private final DepartmentService service;
 
     public DepartmentController(DepartmentService service){
         this.service = service;
