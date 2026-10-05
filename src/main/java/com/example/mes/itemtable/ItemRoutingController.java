@@ -1,8 +1,9 @@
 package com.example.mes.itemtable;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -18,6 +19,13 @@ class ItemRoutingController {
     @GetMapping
     public List<ItemRouting> getAllItemRouting(){
         return service.getAllItemRouting();
+    }
+
+    @PostMapping
+    public ResponseEntity<ItemRouting> createItemRouting(@RequestBody ItemRoutingRequest request){
+        ItemRouting saved = service.createItemRouting(request);
+        URI location = URI.create("item-routing" + saved.getId());
+        return ResponseEntity.created(location).body(saved);
     }
 
 }
